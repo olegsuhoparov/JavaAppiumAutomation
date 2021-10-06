@@ -1,10 +1,13 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MainClassTest extends MainClass{
+public class MainClassTest{
+
+    MainClass cls = new MainClass();
+
     @Test
-    public void testGetLocalNumber(){
-        Assert.assertTrue("Local number expected 14, but we have " + this.getLocalNumber(),
-                this.getLocalNumber() == 14);
+    public void testGetClassNumber(){
+        Assert.assertTrue("Class number expected 45, but we have " + cls.getClassNumber(),
+                cls.getClassNumber() == 45);
     }
 }
