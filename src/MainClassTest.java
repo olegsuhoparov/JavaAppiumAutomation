@@ -7,7 +7,12 @@ public class MainClassTest{
 
     @Test
     public void testGetClassNumber(){
-        Assert.assertTrue("Class number expected 45, but we have " + cls.getClassNumber(),
-                cls.getClassNumber() == 45);
+        Assert.assertTrue("Class string expected contains 'hello' or 'Hello', but we have " + cls.getClassString(),
+                cls.getClassString().toLowerCase().contains("hello"));
+
+//         через логическое "или"
+
+//        Assert.assertTrue("Class string expected contains 'hello' or 'Hello', but we have " + cls.getClassString(),
+//                cls.getClassString().contains("Hello") | cls.getClassString().contains("hello"));
     }
 }
