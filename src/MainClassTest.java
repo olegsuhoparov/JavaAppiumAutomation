@@ -7,7 +7,7 @@ public class MainClassTest{
 
     @Test
     public void testGetClassNumber(){
-        Assert.assertTrue("Class number expected 45, but we have " + cls.getClassNumber(),
-                cls.getClassNumber() == 45);
+        Assert.assertTrue("Class number expected more than 45, but we have " + cls.getClassNumber(),
+                cls.getClassNumber() > 45);
     }
 }
