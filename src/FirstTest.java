@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstTest {
     private AppiumDriver driver;
@@ -89,10 +91,29 @@ public class FirstTest {
                 "Search field not found");
     }
 
+    @Test
+    public void checkSomeArticlesForWord() {
+        click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Search field not found");
+        enterText(By.xpath("//*[contains(@text, 'Search…')]"), "java",
+                "search not found");
+        int numberArticles = waitElementsPresent(By.className("android.widget.LinearLayout"),
+                "No one article were found", 5).size();
+        Assert.assertTrue(String.format("There were found %s articles", numberArticles),
+                numberArticles > 1);
+    }
+
     private WebElement waitElementPresent(By locator, String erMsg, long timeoutSec) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutSec);
         wait.withMessage(erMsg);
         return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+
+    private List<WebElement> waitElementsPresent(By locator, String erMsg, long timeoutSec) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutSec);
+        wait.withMessage(erMsg);
+        wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        return new ArrayList<>(driver.findElements(locator));
     }
 
     private WebElement waitElementPresent(By locator, String erMsg) {
