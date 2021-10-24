@@ -85,7 +85,7 @@ public class FirstTest {
         click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Search field not found");
         assertElementHasText(By.id("org.wikipedia:id/search_src_text"),
-                "Searc",
+                "Search",
                 "Search field not found");
     }
 
