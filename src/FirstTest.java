@@ -39,12 +39,10 @@ public class FirstTest {
     public void firstTest() {
 
         click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "search not found",
-                5);
+                "search not found");
 
         enterText(By.xpath("//*[contains(@text, 'Search…')]"), "java",
-                "search not found",
-                5);
+                "search not found");
 
         waitElementPresent(By.xpath("//*[contains(@text, 'Object-oriented programming language')]"),
                 "Can't find 'Object-oriented programming language'",
@@ -55,34 +53,40 @@ public class FirstTest {
     @Test
     public void testCancelSearch() {
 
-        click(By.id("org.wikipedia:id/search_container"), "Can't find 'search not found", 5);
-        click(By.className("android.widget.ImageButton"), "can't find <-", 5);
+        click(By.id("org.wikipedia:id/search_container"), "Can't find 'search not found");
+        click(By.className("android.widget.ImageButton"), "can't find <-");
         notFound(By.className("android.widget.ImageButton"), "can't find <-", 5);
     }
 
     @Test
     public void testClear() {
 
-        click(By.id("org.wikipedia:id/search_container"), "Can't find 'search not found", 5);
+        click(By.id("org.wikipedia:id/search_container"), "Can't find 'search not found");
         enterText(By.id("org.wikipedia:id/search_src_text"), "java",
-                "search not found",
-                5);
+                "search not found");
         clear(By.id("org.wikipedia:id/search_src_text"), "can't find search field", 5);
     }
 
     @Test
     public void testCompareArticleTitle() {
         click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "search not found",
-                5);
+                "search not found");
 
         enterText(By.xpath("//*[contains(@text, 'Search…')]"), "java",
-                "search not found",
-                5);
-        click(By.xpath("//*[contains(@text, 'Object-oriented programming language')]"), "Title about java not found", 5);
-        WebElement title = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"), "cannot find article", 5);
+                "search not found");
+        click(By.xpath("//*[contains(@text, 'Object-oriented programming language')]"), "Title about java not found");
+        WebElement title = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"), "cannot find article");
         String title_text = title.getAttribute("text");
         Assert.assertEquals("not equals", "Java (programming language)", title_text);
+    }
+
+    @Test
+    public void checkTextInSearch(){
+        click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Search field not found");
+        assertElementHasText(By.id("org.wikipedia:id/search_src_text"),
+                "Searc",
+                "Search field not found");
     }
 
     private WebElement waitElementPresent(By locator, String erMsg, long timeoutSec) {
@@ -95,14 +99,14 @@ public class FirstTest {
         return waitElementPresent(locator, erMsg, 5);
     }
 
-    private WebElement click(By locator, String msg, long timeout) {
-        WebElement element = waitElementPresent(locator, msg, timeout);
+    private WebElement click(By locator, String msg) {
+        WebElement element = waitElementPresent(locator, msg);
         element.click();
         return element;
     }
 
-    private WebElement enterText(By locator, String text, String msg, long timeout) {
-        WebElement element = waitElementPresent(locator, msg, timeout);
+    private WebElement enterText(By locator, String text, String msg) {
+        WebElement element = waitElementPresent(locator, msg);
         element.sendKeys(text);
         return element;
     }
@@ -116,6 +120,12 @@ public class FirstTest {
         WebElement element = waitElementPresent(by, msg, timeout);
         element.clear();
         return element;
+    }
+
+    private void assertElementHasText(By by, String expectedText, String msg){
+        WebElement element = waitElementPresent(by, msg);
+        Assert.assertTrue(String.format("In element %s not found text %s!", by, expectedText),
+                element.getAttribute("text").contains(expectedText));
     }
 
 
