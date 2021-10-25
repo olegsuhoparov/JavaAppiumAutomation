@@ -97,10 +97,23 @@ public class FirstTest {
                 "Search field not found");
         enterText(By.xpath("//*[contains(@text, 'Search…')]"), "java",
                 "search not found");
-        int numberArticles = waitElementsPresent(By.className("android.widget.LinearLayout"),
+        int numberArticles = waitElementsPresent(By.id("org.wikipedia:id/page_list_item_title"),
                 "No one article were found", 5).size();
         Assert.assertTrue(String.format("There were found %s articles", numberArticles),
                 numberArticles > 1);
+    }
+
+    @Test
+    public void javaInEverySearchResult() throws InterruptedException {
+        click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Search field not found");
+        enterText(By.xpath("//*[contains(@text, 'Search…')]"), "java",
+                "search not found");;
+        Assert.assertTrue("Not all results contains word 'java'",
+                waitElementsPresent(By.id("org.wikipedia:id/page_list_item_title"),
+                "No one article were found", 5)
+                .stream().allMatch((e) -> e.getAttribute("text").toLowerCase().contains("java")));
+        // lowercase использую для приведения строковой выдачи к единому формату в сравнении, на мой взгляд тут это не критично
     }
 
     private WebElement waitElementPresent(By locator, String erMsg, long timeoutSec) {
@@ -113,7 +126,7 @@ public class FirstTest {
         WebDriverWait wait = new WebDriverWait(driver, timeoutSec);
         wait.withMessage(erMsg);
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-        return new ArrayList<>(driver.findElements(locator));
+        return new ArrayList<WebElement>(driver.findElements(locator));
     }
 
     private WebElement waitElementPresent(By locator, String erMsg) {
