@@ -167,16 +167,21 @@ public class FirstTest {
                 "Title about java not found for request " + searchLine);
         String titleBeforeRotation = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
                 "can't find title topic for request " + searchLine).getAttribute("text");
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-        String titleAfterRotation = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
-                "can't find title topic for request " + searchLine).getAttribute("text");
-        Assert.assertEquals("Article title have been changed after screen rotation",
-                titleBeforeRotation, titleAfterRotation);
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-        String titleAfterSecondRotation = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
-                "can't find title topic for request " + searchLine).getAttribute("text");
-        Assert.assertEquals("Article title have been changed after second screen rotation",
-                titleBeforeRotation, titleAfterSecondRotation);
+        try {
+            driver.rotate(ScreenOrientation.LANDSCAPE);
+            String titleAfterRotation = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
+                    "can't find title topic for request " + searchLine).getAttribute("text");
+            Assert.assertEquals("Article title have been changed after screen rotation",
+                    titleBeforeRotation, titleAfterRotation);
+        } catch (Exception e) {
+            throw new AssertionError("Something went wrong, rotation screen return to Portrait");
+        } finally {
+            driver.rotate(ScreenOrientation.PORTRAIT);
+            String titleAfterSecondRotation = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
+                    "can't find title topic for request " + searchLine).getAttribute("text");
+            Assert.assertEquals("Article title have been changed after second screen rotation",
+                    titleBeforeRotation, titleAfterSecondRotation);
+        }
     }
 
     @Test
@@ -402,7 +407,7 @@ public class FirstTest {
 
     }
 
-    protected void assertElementPresent(By by, String msg){
+    protected void assertElementPresent(By by, String msg) {
         List<WebElement> elements = driver.findElements(by);
         Assert.assertTrue(msg, elements.size() > 0);
     }
