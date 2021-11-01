@@ -263,6 +263,19 @@ public class FirstTest {
                 titleArticleBeforeDeleteOther, titleArticleAfterDeleteOther);
     }
 
+    @Test
+    public void saveCheckTitleArticleFast() {
+        String nameFolder = "learning programming";
+
+        click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "search not found");
+
+        enterText(By.xpath("//*[contains(@text, 'Search…')]"), "java",
+                "search not found");
+        click(By.xpath("//*[contains(@text, 'Object-oriented programming language')]"), "Title about java not found");
+        assertElementPresent(By.id("org.wikipedia:id/view_page_title_text"), "cannot find article");
+    }
+
     private WebElement waitElementPresent(By locator, String erMsg, long timeoutSec) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutSec);
         wait.withMessage(erMsg);
@@ -387,6 +400,11 @@ public class FirstTest {
         click(By.xpath("//android.widget.ImageView[@content-desc='More options']"), "button ':' not found");
         click(By.xpath("//*[contains(@text, 'Add to reading list')]"), "button 'Add to reading list' not found");
 
+    }
+
+    protected void assertElementPresent(By by, String msg){
+        List<WebElement> elements = driver.findElements(by);
+        Assert.assertTrue(msg, elements.size() > 0);
     }
 
 }
