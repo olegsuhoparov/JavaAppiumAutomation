@@ -27,6 +27,7 @@ public class FirstTest {
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("deviceName", "AndroidTestDevice");
         capabilities.setCapability("platformVersion", "8.0");
+        capabilities.setCapability("orientation", "PORTRAIT");
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("appPackage", "org.wikipedia");
         capabilities.setCapability("appActivity", ".main.MainActivity");
@@ -172,7 +173,7 @@ public class FirstTest {
                 "can't find title topic for request " + searchLine).getAttribute("text");
         Assert.assertEquals("Article title have been changed after screen rotation",
                 titleBeforeRotation, titleAfterRotation);
-        driver.rotate(ScreenOrientation.LANDSCAPE);
+        driver.rotate(ScreenOrientation.PORTRAIT);
         String titleAfterSecondRotation = waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"),
                 "can't find title topic for request " + searchLine).getAttribute("text");
         Assert.assertEquals("Article title have been changed after second screen rotation",
