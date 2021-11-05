@@ -11,7 +11,9 @@ public class SearchPO extends MainPageObject {
             SEARCH_CANCEL = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[contains(@text, '{SUBSTRING}')]",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
+            SEARCH_TEXT = "org.wikipedia:id/search_src_text",
+            SEARCH_RESULT_TITLE = "org.wikipedia:id/page_list_item_title";
 
     public SearchPO(AppiumDriver driver) {
         super(driver);
@@ -64,8 +66,18 @@ public class SearchPO extends MainPageObject {
         this.waitElementsPresent(By.xpath(SEARCH_EMPTY_RESULT_ELEMENT), "can't empty result element", 15);
     }
 
-    public void assertThereIsNoResultOfSearch(){
+    public void assertThereIsNoResultOfSearch() {
         this.waitElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not to find any result", 5);
+    }
+
+    public void assertSearchContainsText(String text) {
+        this.assertElementHasText(By.id(SEARCH_TEXT), text, "Search field not found");
+    }
+
+    public boolean checkTitleInAllSearchResult(String text) {
+        return this.waitElementsPresent(By.id(SEARCH_RESULT_TITLE),
+                "No one article were found", 5)
+                .stream().allMatch((e) -> e.getAttribute("text").toLowerCase().contains(text));
     }
 
 }

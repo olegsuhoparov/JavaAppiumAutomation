@@ -130,27 +130,7 @@ public class MainPageObject {
         return elements.size();
     }
 
-    public void assertElementNotPresent(By by, String msg) {
-        int amountOfElements = countResults(by);
-        if (amountOfElements > 0) {
-            String defaultMessage = "An element '" + by.toString() + "' supposed be not present";
-            throw new AssertionError(defaultMessage + " " + msg);
-        }
-    }
-
-    public void addInReadingList(String textSearch, String describe) {
-        click(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "search not found");
-        enterText(By.xpath("//*[contains(@text, 'Search…')]"), textSearch,
-                "search not found");
-        click(By.xpath("//*[contains(@text, '" + describe + "')]"), "Title about " + textSearch + " not found");
-        waitElementPresent(By.id("org.wikipedia:id/view_page_title_text"), "cannot find article");
-        click(By.xpath("//android.widget.ImageView[@content-desc='More options']"), "button ':' not found");
-        click(By.xpath("//*[contains(@text, 'Add to reading list')]"), "button 'Add to reading list' not found");
-
-    }
-
-    public void assertElementPresent(By by, String msg) {
+    public void assertElementPresentFast(By by, String msg) {
         List<WebElement> elements = driver.findElements(by);
         Assert.assertTrue(msg, elements.size() > 0);
     }

@@ -12,7 +12,8 @@ public class MyListsPO extends MainPageObject {
     private static String getFolderXpathByName(String nameOfFolder) {
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", nameOfFolder);
     }
-    private static String getSavedArticle(String title){
+
+    private static String getSavedArticle(String title) {
         return ARTICLE_BY_TITLE_TPL.replace("{NAME}", title);
     }
 
@@ -24,11 +25,15 @@ public class MyListsPO extends MainPageObject {
         this.click(By.xpath(getFolderXpathByName(nameOfFolder)), "can't find created folder");
     }
 
-    public void waitArticleToDisappearByTitle(String articleTitle){
+    public void openArticleByName(String nameOfFolder) {
+        this.click(By.xpath(getSavedArticle(nameOfFolder)), "can't find created folder");
+    }
+
+    public void waitArticleToDisappearByTitle(String articleTitle) {
         this.waitElementNotPresent(By.xpath(getSavedArticle(articleTitle)), "saved article still present with title " + articleTitle, 15);
     }
 
-    public void waitArticleToAppearByTitle(String articleTitle){
+    public void waitArticleToAppearByTitle(String articleTitle) {
         this.waitElementPresent(By.xpath(getSavedArticle(articleTitle)), "can't find article with title " + articleTitle, 15);
     }
 

@@ -31,4 +31,26 @@ public class ArticleTests extends CoreTestCase {
         articlePO.waitForTitleElement();
         articlePO.swipeToFooter();
     }
+
+    @Test
+    public void testCheckSomeArticlesForWord() {
+        SearchPO searchPO = new SearchPO(driver);
+        searchPO.initSearchInput();
+        searchPO.typeSearchField("java");
+
+        int numberArticles = searchPO.getAmountOfFoundArticles();
+        assertTrue(String.format("There were found %s articles", numberArticles),
+                numberArticles > 1);
+    }
+
+    @Test
+    public void testStringInEverySearchResult() {
+        String text = "java";
+        SearchPO searchPO = new SearchPO(driver);
+        searchPO.initSearchInput();
+        searchPO.typeSearchField(text);
+
+        assertTrue("Not all results contains word 'java'",
+                searchPO.checkTitleInAllSearchResult(text));
+    }
 }

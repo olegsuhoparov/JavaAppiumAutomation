@@ -1,8 +1,10 @@
 package tests;
 
 import helpers.CoreTestCase;
+import helpers.ui.ArticlePO;
 import helpers.ui.SearchPO;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 public class SearchTests extends CoreTestCase {
     @Test
@@ -41,5 +43,25 @@ public class SearchTests extends CoreTestCase {
         searchPO.typeSearchField("aweotjrk#KA");
         searchPO.waitForEmptyResultsLabel();
         searchPO.assertThereIsNoResultOfSearch();
+    }
+
+    @Test
+    public void testCheckTextInSearch() {
+        SearchPO searchPO = new SearchPO(driver);
+        searchPO.initSearchInput();
+        searchPO.assertSearchContainsText("Search");
+    }
+
+    @Test
+    public void testSaveCheckTitleArticleFast() {
+        String searchText = "java";
+        String searchSubstring = "Object-oriented programming language";
+
+        SearchPO searchPO = new SearchPO(driver);
+        ArticlePO articlePO = new ArticlePO(driver);
+        searchPO.initSearchInput();
+        searchPO.typeSearchField(searchText);
+        searchPO.clickByArticleWithSubstring(searchSubstring);
+        assertTrue("Title current article not found", articlePO.assertFastCheckArticleTitle());
     }
 }
