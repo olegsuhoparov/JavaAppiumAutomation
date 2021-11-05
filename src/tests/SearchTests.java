@@ -4,7 +4,6 @@ import helpers.CoreTestCase;
 import helpers.ui.ArticlePO;
 import helpers.ui.SearchPO;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 public class SearchTests extends CoreTestCase {
     @Test
@@ -63,5 +62,16 @@ public class SearchTests extends CoreTestCase {
         searchPO.typeSearchField(searchText);
         searchPO.clickByArticleWithSubstring(searchSubstring);
         assertTrue("Title current article not found", articlePO.assertFastCheckArticleTitle());
+    }
+
+    @Test
+    public void testSearchResultImproved(){
+        String searchText = "Java";
+        String searchSubstring = "Object-oriented programming language";
+
+        SearchPO searchPO = new SearchPO(driver);
+        searchPO.initSearchInput();
+        searchPO.typeSearchField(searchText);
+        searchPO.waitForElementByTitleAndDescription(searchText, searchSubstring);
     }
 }

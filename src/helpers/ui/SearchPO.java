@@ -10,6 +10,7 @@ public class SearchPO extends MainPageObject {
             SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
             SEARCH_CANCEL = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[contains(@text, '{SUBSTRING}')]",
+            SEARCH_RESULT_TWO_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[contains(@text, '{SUBSTRING1}')]/..//*[contains(@text, '{SUBSTRING2}')]",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
             SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
             SEARCH_TEXT = "org.wikipedia:id/search_src_text",
@@ -23,6 +24,10 @@ public class SearchPO extends MainPageObject {
 
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultSearchElementWithTwoSubstrings(String title, String description){
+        return SEARCH_RESULT_TWO_SUBSTRING_TPL.replace("{SUBSTRING1}", title).replace("{SUBSTRING2}", description);
     }
 
     /* TEMPLATE METHODS */
@@ -44,7 +49,7 @@ public class SearchPO extends MainPageObject {
     }
 
     public void clickCancelSearch() {
-        this.click(By.id(SEARCH_CANCEL), "button 'cancel search - x - not found");
+        this.click(By.id(SEARCH_CANCEL), "button cancel search - x - not found");
     }
 
 
@@ -56,6 +61,12 @@ public class SearchPO extends MainPageObject {
     public void clickByArticleWithSubstring(String substring) {
         String searchResultXpath = getResultSearchElement(substring);
         this.click(By.xpath(searchResultXpath), "Can't find search result with substring " + substring);
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String element = getResultSearchElementWithTwoSubstrings(title, description);
+        waitElementPresent(By.xpath(element),
+                "Element with title " + title + " and description " + description + " not found", 5);
     }
 
     public int getAmountOfFoundArticles() {
