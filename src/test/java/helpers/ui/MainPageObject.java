@@ -145,6 +145,11 @@ public class MainPageObject {
 
     public int countResults(String locator) {
         By by = this.getLocatorByString(locator);
+        try { // добавил для ожидания первичного рендера элементов, никак не влияет на скоросто т.к. expected_condition так же под капотом ждут 0,5 сек
+            Thread.sleep(500);
+        }catch (Exception e){
+            System.out.println("DANGER! WAIT BROKEN SYSTEM!!");
+        }
         List elements = driver.findElements(by);
         return elements.size();
     }

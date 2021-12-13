@@ -98,7 +98,12 @@ public class MyListsTests extends CoreTestCase {
         if (Platform.getInstance().isAndroid()) {
             myListsPO.openFolderByName(nameFolder);
         }
+        int articlesBeforeDelete = myListsPO.countArticles();
         myListsPO.swipeByArticleToDelete(languageTwo);
+        int articlesAfterDelete = myListsPO.countArticles();
+
+        assertEquals("Title second article before and after delete first article isn't equals",
+                articlesBeforeDelete - 1, articlesAfterDelete);
 
         myListsPO.openArticleByName(languageOne);
 

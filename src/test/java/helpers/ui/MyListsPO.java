@@ -8,6 +8,7 @@ abstract public class MyListsPO extends MainPageObject {
     protected static String
             FOLDER_BY_NAME_TPL,
             ARTICLE_BY_TITLE_TPL,
+            ARTICLE_CONTAINERS,
             REMOVE_FROM_SAVED_BUTTON;
 
     private static String getFolderXpathByName(String nameOfFolder) {
@@ -44,7 +45,7 @@ abstract public class MyListsPO extends MainPageObject {
     }
 
     public void swipeByArticleToDelete(String articleTitle) {
-        if(Platform.getInstance().isMw()){
+        if (Platform.getInstance().isMw()) {
             String removeLocator = getRemoveLocatorByTitle(articleTitle);
             this.click(removeLocator, "Can't find button to remove article");
             driver.navigate().refresh();
@@ -55,5 +56,9 @@ abstract public class MyListsPO extends MainPageObject {
             this.clickElementToTheRightUpperCorner(articleTitle, "can't find saved article");
         }
         this.waitArticleToDisappearByTitle(articleTitle);
+    }
+
+    public int countArticles() {
+        return this.countResults(ARTICLE_CONTAINERS);
     }
 }
