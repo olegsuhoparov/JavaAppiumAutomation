@@ -1,6 +1,7 @@
 package helpers.ui;
 
 import helpers.Platform;
+import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class MyListsPO extends MainPageObject {
@@ -28,22 +29,27 @@ abstract public class MyListsPO extends MainPageObject {
         super(driver);
     }
 
+    @Step("Opening folder with name '{nameOfFolder}'")
     public void openFolderByName(String nameOfFolder) {
         this.click(getFolderXpathByName(nameOfFolder), "can't find created folder");
     }
 
+    @Step("Opening article with name '{nameOfArticle}'")
     public void openArticleByName(String nameOfArticle) {
         this.click(getSavedArticle(nameOfArticle), "can't find created article");
     }
 
+    @Step("Waiting for article with name '{articleTitle}' to disappear")
     public void waitArticleToDisappearByTitle(String articleTitle) {
         this.waitElementNotPresent(getSavedArticle(articleTitle), "saved article still present with title " + articleTitle, 15);
     }
 
+    @Step("Waiting for article with name '{articleTitle}' to appear")
     public void waitArticleToAppearByTitle(String articleTitle) {
         this.waitElementPresent(getSavedArticle(articleTitle), "can't find article with title " + articleTitle, 15);
     }
 
+    @Step("Delete article with name '{articleTitle}'")
     public void swipeByArticleToDelete(String articleTitle) {
         if (Platform.getInstance().isMw()) {
             String removeLocator = getRemoveLocatorByTitle(articleTitle);
@@ -58,6 +64,7 @@ abstract public class MyListsPO extends MainPageObject {
         this.waitArticleToDisappearByTitle(articleTitle);
     }
 
+    @Step("Count articles")
     public int countArticles() {
         return this.countResults(ARTICLE_CONTAINERS);
     }

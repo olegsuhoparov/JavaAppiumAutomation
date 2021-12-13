@@ -1,5 +1,6 @@
 package helpers.ui;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class WelcomePO extends MainPageObject {
@@ -16,30 +17,37 @@ public class WelcomePO extends MainPageObject {
         super(driver);
     }
 
+    @Step("Waiting for link 'learn more'")
     public void waitForLearnMoreLink() {
         this.waitElementPresent(STEP_LEARN_MORE_LINK, "Can't find 'learn more about wikipedia' link");
     }
 
+    @Step("Waiting for 'New way to explore' text")
     public void waitForNewWayToExploreText() {
         this.waitElementPresent(STEP_NEW_WAYS_TO_EXPLORE_TEXT, "Can't find 'New ways to explore' link");
     }
 
+    @Step("Waiting for 'Add or edit new way to explore' text")
     public void waitForAddOrEditNewWayToExploreText() {
         this.waitElementPresent(STEP_ADD_OR_EDIT_PREFERRED_LANG_LINK, "Can't find 'Add or edit preferred languages' link");
     }
 
+    @Step("Waiting for 'Learn more about data collected' text")
     public void waitForLearnMoreAboutDataCollectedText() {
         this.waitElementPresent(STEP_LEARN_MORE_ABOUT_DATA_COLLECTED_LINK, "Can't find 'Learn more about data collected' link");
     }
 
+    @Step("Click button 'Next'")
     public void clickNextButton() {
         this.click(NEXT_LINK, "'Next' link not found for click");
     }
 
+    @Step("Click button 'Get started'")
     public void clickGetStartedButton() {
         this.click(GET_STARTED_BUTTON, "'Get started' link not found");
     }
 
+    @Step("Click button 'Skip'")
     public void clickSkip(){
         this.click(SKIP, "button 'Skip' not found for click");
     }

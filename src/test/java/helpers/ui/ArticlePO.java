@@ -1,6 +1,7 @@
 package helpers.ui;
 
 import helpers.Platform;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -23,10 +24,12 @@ public abstract class ArticlePO extends MainPageObject {
         super(driver);
     }
 
+    @Step("Waiting for title on article page")
     public WebElement waitForTitleElement() {
         return this.click(TITLE, "Can't find article on page!");
     }
 
+    @Step("getting article title")
     public String getArticleTitle() {
         if (Platform.getInstance().isAndroid()) {
             return waitForTitleElement().getAttribute("text");
@@ -38,6 +41,7 @@ public abstract class ArticlePO extends MainPageObject {
 
     }
 
+    @Step("Swiping to footer article page")
     public void swipeToFooter() {
         if (Platform.getInstance().isAndroid()) {
             this.swipeUpToFindElement(FOOTER_ELEMENT, "Can't find the end of article", 95);
@@ -48,6 +52,7 @@ public abstract class ArticlePO extends MainPageObject {
         }
     }
 
+    @Step("Adding article to my list")
     public void addArticleToMyList(String nameOfFolder) {
         this.click(OPTIONS_BUTTON, "button ':' not found");
         this.click(ADD_TO_MY_LIST, "button 'Add to reading list' not found");
@@ -57,23 +62,27 @@ public abstract class ArticlePO extends MainPageObject {
         this.click(MY_LIST_OK_BUTTON, "can't press 'ok'");
     }
 
+    @Step("Closing article")
     public void closeArticle() {
-        if(Platform.getInstance().isMw()){
+        if (Platform.getInstance().isMw()) {
             return;
         }
         this.click(CLOSE, "'X' not found");
     }
 
+    @Step("Adding article in exist list")
     public void addArticleInExistList() {
         this.click(OPTIONS_BUTTON, "button ':' not found");
         this.click(ADD_TO_MY_LIST, "button 'Add to reading list' not found");
         this.click(CURRENT_LIST_ICON, "readline with slots not found");
     }
 
+    @Step("Fast checking article title")
     public void assertFastCheckArticleTitle() {
         this.waitElementPresent(TITLE, "can't find article", 10);
     }
 
+    @Step("Adding article in saved")
     public void addArticleToMySaved() {
         if (Platform.getInstance().isMw()) {
             this.removeArticleFromSavedIfAdded();
@@ -81,6 +90,7 @@ public abstract class ArticlePO extends MainPageObject {
         this.click(ADD_TO_MY_LIST, "Can't add article in reading list");
     }
 
+    @Step("Removing article from saved if they was added")
     public void removeArticleFromSavedIfAdded() {
         if (this.isElementPresent(REMOVE_FROM_MY_LIST_BUTTON)) {
             this.click(REMOVE_FROM_MY_LIST_BUTTON, "Can't click button to remove an article from saved");

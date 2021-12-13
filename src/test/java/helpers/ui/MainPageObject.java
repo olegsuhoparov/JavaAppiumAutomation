@@ -5,12 +5,17 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import io.qameta.allure.Attachment;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,9 +150,9 @@ public class MainPageObject {
 
     public int countResults(String locator) {
         By by = this.getLocatorByString(locator);
-        try { // добавил для ожидания первичного рендера элементов, никак не влияет на скоросто т.к. expected_condition так же под капотом ждут 0,5 сек
-            Thread.sleep(500);
-        }catch (Exception e){
+        try { // добавил для ожидания первичного рендера элементов, практически никак не влияет на скоросто т.к. expected_condition так же под капотом ждут 0,5 сек
+            Thread.sleep(900);
+        } catch (Exception e) {
             System.out.println("DANGER! WAIT BROKEN SYSTEM!!");
         }
         List elements = driver.findElements(by);
@@ -160,8 +165,8 @@ public class MainPageObject {
 
     public boolean isElementLocatedOnTheScreen(String locator) {
         int elementLocationByY = this.waitElementPresent(locator, "Can't find element by locator").getLocation().getY();
-        if(Platform.getInstance().isMw()){
-            JavascriptExecutor jsExecutor = (JavascriptExecutor)driver;
+        if (Platform.getInstance().isMw()) {
+            JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
             Object jsResult = jsExecutor.executeScript("return window.pageYOffset");
             elementLocationByY -= Integer.parseInt(jsResult.toString());
         }
@@ -211,40 +216,65 @@ public class MainPageObject {
         }
     }
 
-    public void scrollWebPageApp(){
-        if(Platform.getInstance().isMw()){
-            JavascriptExecutor JSExecutor = (JavascriptExecutor)driver;
+    public void scrollWebPageApp() {
+        if (Platform.getInstance().isMw()) {
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
             JSExecutor.executeScript("window.scrollBy(0, 250)");
         } else {
             System.out.println("Method scrollWebPageApp() doing nothing for platform" + Platform.getInstance().getPlatformVar());
 
         }
     }
-    public void scrollWebPageTillElementNotVisible(String locator, String msg, int maxSwipes){
+
+    public void scrollWebPageTillElementNotVisible(String locator, String msg, int maxSwipes) {
         int alreadySwiped = 0;
         WebElement element = this.waitElementPresent(locator, msg);
-        while (this.isElementLocatedOnTheScreen(locator)){
+        while (this.isElementLocatedOnTheScreen(locator)) {
             scrollWebPageApp();
-            if(alreadySwiped < maxSwipes){
+            if (alreadySwiped < maxSwipes) {
                 Assert.assertTrue(msg, element.isDisplayed());
             }
         }
     }
 
-    public void tryClickElementWithFewAttempts(String locator, String msg, int attempts){
+    public void tryClickElementWithFewAttempts(String locator, String msg, int attempts) {
         int currentAttempts = 0;
         boolean needMoreAttempts = true;
-        while (needMoreAttempts){
+        while (needMoreAttempts) {
             try {
                 this.waitElementPresent(locator, msg, 1).click();
                 needMoreAttempts = false;
-            }catch (Exception e){
-                if(currentAttempts > attempts){
+            } catch (Exception e) {
+                if (currentAttempts > attempts) {
                     this.click(locator, msg);
                 }
             }
             ++currentAttempts;
         }
+    }
+
+    public String takeScreenshot(String name) {
+        TakesScreenshot ts = (TakesScreenshot) this.driver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
+        String path = System.getProperty("user.dir") + "/" + "name" + "_screenshot.png";
+        try {
+            FileUtils.copyFile(source, new File(path));
+            System.out.println("The screenshot was taken: " + path);
+        } catch (Exception e) {
+            System.out.println("Can't take screenshot. Error: " + e.getMessage());
+        }
+        return path;
+    }
+
+    @Attachment
+    public static byte[] screenshot(String path) {
+        byte[] bytes = new byte[0];
+        try {
+            bytes = Files.readAllBytes(Paths.get(path));
+        } catch (Exception e) {
+            System.out.println("Can't get bytes from screenshot. Error " + e.getMessage());
+        }
+        return bytes;
     }
 
 }

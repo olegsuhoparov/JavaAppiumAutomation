@@ -7,13 +7,22 @@ import helpers.ui.factories.ArticlePOFactory;
 import helpers.ui.factories.MyListsPOFactory;
 import helpers.ui.factories.NavigationUIFactory;
 import helpers.ui.factories.SearchPOFactory;
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
+import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Tests for my lists")
 public class MyListsTests extends CoreTestCase {
     String login = "Olegst4";
     String password = "gdepe4ka";
 
     @Test
+    @Features(value = {@Feature(value = "MyLists"), @Feature(value = "Article")})
+    @DisplayName("Check that article saving in my lists")
+    @Description("We are saving the article in my lists and check this article in my list after that")
+    @Step("Starting testSaveArticleToMyList")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveArticleToMyList() {
 
         String nameFolder = "learning programming";
@@ -38,7 +47,7 @@ public class MyListsTests extends CoreTestCase {
             authorisationPO.enterLoginData(login, password);
             authorisationPO.submitForm();
             articlePO.waitForTitleElement();
-            assertEquals("We aren't the same pag after login", articleTitle, articlePO.getArticleTitle());
+            Assert.assertEquals("We aren't the same pag after login", articleTitle, articlePO.getArticleTitle());
             articlePO.addArticleToMySaved();
         }
         articlePO.closeArticle();
@@ -51,6 +60,11 @@ public class MyListsTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value = "MyLists"), @Feature(value = "Article")})
+    @DisplayName("Check that the right article was deleted")
+    @Description("We are saving two articles in my lists, delete one of them and check that the right article stayed in mylists")
+    @Step("Starting testSaveTwoArticlesToMyListAndDeleteOneOfThem")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveTwoArticlesToMyListAndDeleteOneOfThem() {
         String nameFolder = "Programming languages";
         String languageOne = "Java";
@@ -79,7 +93,7 @@ public class MyListsTests extends CoreTestCase {
             authorisationPO.enterLoginData(login, password);
             authorisationPO.submitForm();
             articlePO.waitForTitleElement();
-            assertEquals("We aren't the same pag after login", articleTitle, articlePO.getArticleTitle());
+            Assert.assertEquals("We aren't the same pag after login", articleTitle, articlePO.getArticleTitle());
             articlePO.addArticleToMySaved();
         }
         articlePO.closeArticle();
@@ -89,7 +103,7 @@ public class MyListsTests extends CoreTestCase {
         if (Platform.getInstance().isAndroid()) {
             articlePO.addArticleInExistList();
             articlePO.closeArticle();
-        } else if(Platform.getInstance().isMw()) {
+        } else if (Platform.getInstance().isMw()) {
             articlePO.addArticleToMySaved();
         }
         navigationUI.openNavigation();
@@ -102,13 +116,13 @@ public class MyListsTests extends CoreTestCase {
         myListsPO.swipeByArticleToDelete(languageTwo);
         int articlesAfterDelete = myListsPO.countArticles();
 
-        assertEquals("Title second article before and after delete first article isn't equals",
+        Assert.assertEquals("Title second article before and after delete first article isn't equals",
                 articlesBeforeDelete - 1, articlesAfterDelete);
 
         myListsPO.openArticleByName(languageOne);
 
         String articleTitleAfterDeleteOther = articlePO.getArticleTitle();
-        assertEquals("Title second article before and after delete first article isn't equals",
+        Assert.assertEquals("Title second article before and after delete first article isn't equals",
                 articleTitle, articleTitleAfterDeleteOther);
     }
 
