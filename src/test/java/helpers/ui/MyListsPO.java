@@ -15,7 +15,7 @@ abstract public class MyListsPO extends MainPageObject {
     }
 
     private static String getSavedArticle(String title) {
-        return ARTICLE_BY_TITLE_TPL.replace("{NAME}", title);
+        return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", title);
     }
 
     private static String getRemoveLocatorByTitle(String title) {
@@ -31,8 +31,8 @@ abstract public class MyListsPO extends MainPageObject {
         this.click(getFolderXpathByName(nameOfFolder), "can't find created folder");
     }
 
-    public void openArticleByName(String nameOfFolder) {
-        this.click(getSavedArticle(nameOfFolder), "can't find created folder");
+    public void openArticleByName(String nameOfArticle) {
+        this.click(getSavedArticle(nameOfArticle), "can't find created article");
     }
 
     public void waitArticleToDisappearByTitle(String articleTitle) {

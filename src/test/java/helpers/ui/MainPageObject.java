@@ -40,7 +40,7 @@ public class MainPageObject {
     }
 
     public WebElement waitElementPresent(String locator, String msg) {
-        return waitElementPresent(locator, msg, 5);
+        return waitElementPresent(locator, msg, 6);
     }
 
     public WebElement waitIgnoreStaleReferent(String locator, String msg) {
