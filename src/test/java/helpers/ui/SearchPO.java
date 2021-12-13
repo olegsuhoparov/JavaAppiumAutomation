@@ -1,5 +1,6 @@
 package helpers.ui;
 
+import helpers.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class SearchPO extends MainPageObject {
@@ -25,7 +26,7 @@ abstract public class SearchPO extends MainPageObject {
         return SEARCH_RESULT_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
 
-    private static String getResultSearchElementWithTwoSubstrings(String title, String description){
+    private static String getResultSearchElementWithTwoSubstrings(String title, String description) {
         return SEARCH_RESULT_TWO_SUBSTRING_TPL.replace("{SUBSTRING1}", title).replace("{SUBSTRING2}", description);
     }
 
@@ -85,8 +86,13 @@ abstract public class SearchPO extends MainPageObject {
     }
 
     public boolean checkTitleInAllSearchResult(String text) {
+        if (Platform.getInstance().isMw()) {
+            return this.waitElementsPresent(SEARCH_RESULT_TITLE,
+                            "No one article were found", 5)
+                    .stream().allMatch((e) -> e.getText().toLowerCase().contains(text));
+        }
         return this.waitElementsPresent(SEARCH_RESULT_TITLE,
-                "No one article were found", 5)
+                        "No one article were found", 5)
                 .stream().allMatch((e) -> e.getAttribute("text").toLowerCase().contains(text));
     }
 

@@ -13,7 +13,7 @@ public class MWSearchPO extends SearchPO {
         SEARCH_RESULT_ELEMENT = "css:ul.page-list>li.page-summary";
         SEARCH_EMPTY_RESULT_ELEMENT = "css:p.without-results";
         SEARCH_TEXT = "id:org.wikipedia:id/search_src_text";
-        SEARCH_RESULT_TITLE = "id:org.wikipedia:id/page_list_item_title";
+        SEARCH_RESULT_TITLE = "css:[class*='actionable'] h3";
     }
 
     public MWSearchPO(RemoteWebDriver driver) {
