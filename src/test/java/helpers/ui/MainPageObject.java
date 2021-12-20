@@ -7,11 +7,12 @@ import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -87,8 +88,8 @@ public class MainPageObject {
 
     public void assertElementHasText(String locator, String expectedText, String msg) {
         WebElement element = waitElementPresent(locator, msg);
-        Assert.assertTrue(String.format("In element %s not found text %s!", locator, expectedText),
-                element.getAttribute("text").contains(expectedText));
+        Assert.assertTrue(element.getAttribute("text").contains(expectedText),
+                String.format("In element %s not found text %s!", locator, expectedText));
     }
 
     public void swipeUp(int timeOfSwipe) {
@@ -178,7 +179,7 @@ public class MainPageObject {
         int alreadySwiped = 0;
         while (this.isElementLocatedOnTheScreen(locator)) {
             if (alreadySwiped > maxSwipes) {
-                Assert.assertTrue(msg, this.isElementLocatedOnTheScreen(locator));
+                Assert.assertTrue(this.isElementLocatedOnTheScreen(locator), msg);
             }
             swipeUpQuick();
             ++alreadySwiped;
@@ -232,7 +233,7 @@ public class MainPageObject {
         while (this.isElementLocatedOnTheScreen(locator)) {
             scrollWebPageApp();
             if (alreadySwiped < maxSwipes) {
-                Assert.assertTrue(msg, element.isDisplayed());
+                Assert.assertTrue(element.isDisplayed(), msg);
             }
         }
     }
@@ -253,7 +254,7 @@ public class MainPageObject {
         }
     }
 
-    public String takeScreenshot(String name) {
+    public String takeScreenshot() {
         TakesScreenshot ts = (TakesScreenshot) this.driver;
         File source = ts.getScreenshotAs(OutputType.FILE);
         String path = System.getProperty("user.dir") + "/" + "name" + "_screenshot.png";
@@ -276,5 +277,4 @@ public class MainPageObject {
         }
         return bytes;
     }
-
 }

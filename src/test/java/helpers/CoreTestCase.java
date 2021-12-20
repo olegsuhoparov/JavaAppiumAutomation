@@ -1,25 +1,32 @@
 package helpers;
 
+import helpers.ui.MainPageObject;
 import helpers.ui.WelcomePO;
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
-import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 
 import java.io.FileOutputStream;
 import java.time.Duration;
 import java.util.Properties;
 
+@Listeners(Listener.class)
 public class CoreTestCase{
 
     protected RemoteWebDriver driver;
 
-    @Before
+    @BeforeMethod()
     @Step("Start driver and session")
-    public void setUp() throws Exception {
+    public void setUp(ITestContext context) throws Exception {
         driver = Platform.getInstance().getDriver();
         this.createAllurePropertyFile();
         this.rotateScreenPortrait();
@@ -27,9 +34,12 @@ public class CoreTestCase{
         this.openWikiWebPageForMobilePlatform();
     }
 
-    @After
+    @AfterMethod()
     @Step("Remove driver and session")
-    public void tearDown(){
+    public void tearDown(ITestResult result){
+        if(!result.isSuccess()){
+            saveScreenshot(allureScr());
+        }
         driver.quit();
     }
 
@@ -93,6 +103,15 @@ public class CoreTestCase{
             System.err.println("IO problem when writing allure properties file");
             e.printStackTrace();
         }
+    }
+
+    public byte[] allureScr() {
+        return ((TakesScreenshot) this.driver).getScreenshotAs(OutputType.BYTES);
+    }
+
+    @Attachment(value = "Page screenshot", type = "image/png")
+    public byte[] saveScreenshot(byte[] screenShot){
+        return screenShot;
     }
 
 }

@@ -8,9 +8,9 @@ import helpers.ui.factories.MyListsPOFactory;
 import helpers.ui.factories.NavigationUIFactory;
 import helpers.ui.factories.SearchPOFactory;
 import io.qameta.allure.*;
-import io.qameta.allure.junit4.DisplayName;
-import org.junit.Assert;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 
 @Epic("Tests for my lists")
 public class MyListsTests extends CoreTestCase {
@@ -19,7 +19,6 @@ public class MyListsTests extends CoreTestCase {
 
     @Test
     @Features(value = {@Feature(value = "MyLists"), @Feature(value = "Article")})
-    @DisplayName("Check that article saving in my lists")
     @Description("We are saving the article in my lists and check this article in my list after that")
     @Step("Starting testSaveArticleToMyList")
     @Severity(value = SeverityLevel.NORMAL)
@@ -47,7 +46,7 @@ public class MyListsTests extends CoreTestCase {
             authorisationPO.enterLoginData(login, password);
             authorisationPO.submitForm();
             articlePO.waitForTitleElement();
-            Assert.assertEquals("We aren't the same pag after login", articleTitle, articlePO.getArticleTitle());
+            Assert.assertEquals(articleTitle, articlePO.getArticleTitle(), "We aren't the same pag after login");
             articlePO.addArticleToMySaved();
         }
         articlePO.closeArticle();
@@ -61,7 +60,6 @@ public class MyListsTests extends CoreTestCase {
 
     @Test
     @Features(value = {@Feature(value = "MyLists"), @Feature(value = "Article")})
-    @DisplayName("Check that the right article was deleted")
     @Description("We are saving two articles in my lists, delete one of them and check that the right article stayed in mylists")
     @Step("Starting testSaveTwoArticlesToMyListAndDeleteOneOfThem")
     @Severity(value = SeverityLevel.NORMAL)
@@ -93,7 +91,7 @@ public class MyListsTests extends CoreTestCase {
             authorisationPO.enterLoginData(login, password);
             authorisationPO.submitForm();
             articlePO.waitForTitleElement();
-            Assert.assertEquals("We aren't the same pag after login", articleTitle, articlePO.getArticleTitle());
+            Assert.assertEquals(articleTitle, articlePO.getArticleTitle(), "We aren't the same pag after login");
             articlePO.addArticleToMySaved();
         }
         articlePO.closeArticle();
@@ -116,14 +114,14 @@ public class MyListsTests extends CoreTestCase {
         myListsPO.swipeByArticleToDelete(languageTwo);
         int articlesAfterDelete = myListsPO.countArticles();
 
-        Assert.assertEquals("Title second article before and after delete first article isn't equals",
-                articlesBeforeDelete - 1, articlesAfterDelete);
+        Assert.assertEquals(articlesBeforeDelete - 1, articlesAfterDelete,
+                "Title second article before and after delete first article isn't equals");
 
         myListsPO.openArticleByName(languageOne);
 
         String articleTitleAfterDeleteOther = articlePO.getArticleTitle();
-        Assert.assertEquals("Title second article before and after delete first article isn't equals",
-                articleTitle, articleTitleAfterDeleteOther);
+        Assert.assertEquals(articleTitle, articleTitleAfterDeleteOther,
+                "Title second article before and after delete first article isn't equals");
     }
 
 }
